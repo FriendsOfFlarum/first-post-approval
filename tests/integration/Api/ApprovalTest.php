@@ -12,10 +12,10 @@
 namespace FoF\FirstPostApproval\Tests\integration\Api;
 
 use Carbon\Carbon;
-use FoF\FirstPostApproval\Tests\integration\ExtensionDepsTrait;
 use Flarum\Discussion\Discussion;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
+use FoF\FirstPostApproval\Tests\integration\ExtensionDepsTrait;
 use Illuminate\Support\Arr;
 
 class ApprovalTest extends TestCase
@@ -51,7 +51,7 @@ class ApprovalTest extends TestCase
     {
         return [
             [1],
-            [3]
+            [3],
         ];
     }
 
@@ -59,12 +59,13 @@ class ApprovalTest extends TestCase
     {
         return [
             [2],
-            [4]
+            [4],
         ];
     }
 
     /**
      * @test
+     *
      * @dataProvider approvedUsers
      */
     public function approvedUsersCanStartDiscussionWithoutApproval(?int $userId)
@@ -72,13 +73,13 @@ class ApprovalTest extends TestCase
         $response = $this->send(
             $this->request('POST', '/api/discussions', [
                 'authenticatedAs' => $userId,
-                'json' => [
+                'json'            => [
                     'data' => [
                         'attributes' => [
-                            'title' => 'test - too-obscure',
+                            'title'   => 'test - too-obscure',
                             'content' => 'predetermined content for automated testing - too-obscure',
                         ],
-                    ]
+                    ],
                 ],
             ])
         );
@@ -89,7 +90,6 @@ class ApprovalTest extends TestCase
 
         $this->assertIsNumeric($data['data']['id']);
         /** @var Discussion $discussion */
-
         $discussion = Discussion::find($data['data']['id']);
         $this->assertNotNull($discussion);
         $this->assertEquals('test - too-obscure', $discussion->title);
@@ -106,6 +106,7 @@ class ApprovalTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider approvedUsers
      */
     public function approvedUsersCanReplyWithoutApproval(?int $userId)
@@ -113,7 +114,7 @@ class ApprovalTest extends TestCase
         $response = $this->send(
             $this->request('POST', '/api/posts', [
                 'authenticatedAs' => $userId,
-                'json' => [
+                'json'            => [
                     'data' => [
                         'attributes' => [
                             'content' => 'predetermined content for automated testing - too-obscure',
@@ -122,7 +123,7 @@ class ApprovalTest extends TestCase
                             'discussion' => [
                                 'data' => [
                                     'type' => 'discussions',
-                                    'id' => '1',
+                                    'id'   => '1',
                                 ],
                             ],
                         ],
@@ -137,7 +138,6 @@ class ApprovalTest extends TestCase
 
         $this->assertIsNumeric($data['data']['id']);
         /** @var Discussion $discussion */
-
         $post = Discussion::find(1)->posts->firstWhere('id', $data['data']['id']);
         $this->assertNotNull($post);
         $this->assertEquals('predetermined content for automated testing - too-obscure', $post->content);
@@ -151,6 +151,7 @@ class ApprovalTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider unapprovedUsers
      */
     public function unapprovedUsersDiscussionIsMarkedForApproval(?int $userId)
@@ -158,13 +159,13 @@ class ApprovalTest extends TestCase
         $response = $this->send(
             $this->request('POST', '/api/discussions', [
                 'authenticatedAs' => $userId,
-                'json' => [
+                'json'            => [
                     'data' => [
                         'attributes' => [
-                            'title' => 'test - too-obscure',
+                            'title'   => 'test - too-obscure',
                             'content' => 'predetermined content for automated testing - too-obscure',
                         ],
-                    ]
+                    ],
                 ],
             ])
         );
@@ -175,7 +176,6 @@ class ApprovalTest extends TestCase
 
         $this->assertIsNumeric($data['data']['id']);
         /** @var Discussion $discussion */
-
         $discussion = Discussion::find($data['data']['id']);
         $this->assertNotNull($discussion);
         $this->assertEquals('test - too-obscure', $discussion->title);
@@ -194,6 +194,7 @@ class ApprovalTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider unapprovedUsers
      */
     public function unapprovedUsersPostIsMarkedForApproval(?int $userId)
@@ -201,7 +202,7 @@ class ApprovalTest extends TestCase
         $response = $this->send(
             $this->request('POST', '/api/posts', [
                 'authenticatedAs' => $userId,
-                'json' => [
+                'json'            => [
                     'data' => [
                         'attributes' => [
                             'content' => 'predetermined content for automated testing - too-obscure',
@@ -210,7 +211,7 @@ class ApprovalTest extends TestCase
                             'discussion' => [
                                 'data' => [
                                     'type' => 'discussions',
-                                    'id' => '1',
+                                    'id'   => '1',
                                 ],
                             ],
                         ],

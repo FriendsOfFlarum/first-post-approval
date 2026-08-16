@@ -11,11 +11,11 @@
 
 namespace FoF\FirstPostApproval\Listeners;
 
-use FoF\FirstPostApproval\Repository\FirstPostApprovalRepository;
 use Flarum\Discussion\Discussion;
 use Flarum\Extension\ExtensionManager;
 use Flarum\Post\Event\Saving;
 use Flarum\Settings\SettingsRepositoryInterface;
+use FoF\FirstPostApproval\Repository\FirstPostApprovalRepository;
 
 class UnapproveNewPosts
 {
@@ -58,6 +58,7 @@ class UnapproveNewPosts
         if ($this->extensions->isEnabled('fof-byobu')) {
             /** @var \FoF\Byobu\Discussion\Screener $byobu */
             $byobu = resolve(\FoF\Byobu\Discussion\Screener::class);
+
             return $byobu->fromDiscussion($discussion)->isPrivate();
         }
 

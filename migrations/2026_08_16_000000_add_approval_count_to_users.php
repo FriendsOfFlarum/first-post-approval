@@ -18,7 +18,7 @@ use Illuminate\Database\Schema\Builder;
  * that extension's migrations are recorded against this extension's ID.
  */
 $columns = [
-    'first_post_approval_count' => ['tinyInteger', 'unsigned' => true, 'default' => 0],
+    'first_post_approval_count'       => ['tinyInteger', 'unsigned' => true, 'default' => 0],
     'first_discussion_approval_count' => ['tinyInteger', 'unsigned' => true, 'default' => 0],
 ];
 

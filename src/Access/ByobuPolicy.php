@@ -48,6 +48,7 @@ class ByobuPolicy extends AbstractPolicy
 
     /**
      * @param mixed $instance
+     *
      * @return string|void
      */
     public function can(User $actor, string $ability, $instance = null)

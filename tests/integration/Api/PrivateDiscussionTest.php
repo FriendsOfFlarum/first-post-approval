@@ -53,10 +53,10 @@ class PrivateDiscussionTest extends TestCase
         return $this->send(
             $this->request('POST', '/api/discussions', [
                 'authenticatedAs' => $actorId,
-                'json' => [
+                'json'            => [
                     'data' => [
                         'attributes' => [
-                            'title' => 'test - too-obscure',
+                            'title'   => 'test - too-obscure',
                             'content' => 'predetermined content for automated testing - too-obscure',
                         ],
                         'relationships' => [
