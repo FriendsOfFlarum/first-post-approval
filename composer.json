@@ -11,7 +11,6 @@
     "type": "flarum-extension",
     "license": "MIT",
     "require": {
-        "php": "^8.3",
         "flarum/approval": "*",
         "flarum/core": "^2.0.0"
     },

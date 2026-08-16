@@ -13,6 +13,7 @@ namespace FoF\FirstPostApproval\Tests\integration\Api;
 
 use Carbon\Carbon;
 use Flarum\Discussion\Discussion;
+use Flarum\Group\Group;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
 use FoF\FirstPostApproval\Tests\integration\ExtensionDepsTrait;
@@ -33,9 +34,6 @@ class ApprovalTest extends TestCase
 
         $this->extensionDeps();
 
-        // Tags is only enabled as a dependency of Byobu, so don't require a tag to start a discussion
-        $this->setting('flarum-tags.min_primary_tags', 0);
-
         $this->prepareDatabase([
             Discussion::class => [
                 ['id' => 1, 'title' => __CLASS__, 'created_at' => Carbon::now()->toDateTimeString(), 'user_id' => 3, 'first_post_id' => 1],
@@ -47,6 +45,20 @@ class ApprovalTest extends TestCase
                 $this->normalUser(),
                 ['id' => 3, 'username' => 'establishedUser', 'email' => 'established@machine.local', 'is_email_confirmed' => true, 'first_discussion_approval_count' => 10, 'first_post_approval_count' => 20],
                 ['id' => 4, 'username' => 'newUser', 'email' => 'newuser@machine.local', 'is_email_confirmed' => true, 'first_discussion_approval_count' => 0, 'first_post_approval_count' => 0],
+            ],
+            'group_user' => [
+                ['user_id' => 2, 'group_id' => Group::MEMBER_ID],
+                ['user_id' => 3, 'group_id' => Group::MEMBER_ID],
+                ['user_id' => 4, 'group_id' => Group::MEMBER_ID],
+            ],
+            'group_permission' => [
+                // Tags is only enabled as a dependency of Byobu. In 2.0 the tags
+                // relationship is required on creation unless the actor can
+                // bypassTagCounts, so grant that rather than tag every discussion.
+                ['group_id' => Group::MEMBER_ID, 'permission' => 'bypassTagCounts', 'created_at' => Carbon::now()->toDateTimeString()],
+                // Several tests post as the same user in quick succession, which
+                // would otherwise trip the 10s post creation throttle (429).
+                ['group_id' => Group::MEMBER_ID, 'permission' => 'postWithoutThrottle', 'created_at' => Carbon::now()->toDateTimeString()],
             ],
         ]);
     }
