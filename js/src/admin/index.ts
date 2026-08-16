@@ -3,7 +3,7 @@ import app from 'flarum/admin/app';
 export const settingsPrefix = 'fof-first-post-approval';
 
 app.initializers.add(settingsPrefix, () => {
-  const extensionData = app.extensionData
+  const extensionData = app.registry
     .for(settingsPrefix)
     .registerSetting({
       setting: `${settingsPrefix}.postCount`,
