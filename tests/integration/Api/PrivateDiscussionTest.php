@@ -16,6 +16,8 @@ use Flarum\Group\Group;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
 use FoF\FirstPostApproval\Tests\integration\ExtensionDepsTrait;
+use PHPUnit\Framework\Attributes\Test;
+use Flarum\User\User;
 
 class PrivateDiscussionTest extends TestCase
 {
@@ -32,7 +34,7 @@ class PrivateDiscussionTest extends TestCase
         $this->setting('flarum-tags.min_primary_tags', 0);
 
         $this->prepareDatabase([
-            'users' => [
+            User::class => [
                 $this->normalUser(),
                 ['id' => 3, 'username' => 'establishedUser', 'email' => 'established@machine.local', 'is_email_confirmed' => true, 'first_discussion_approval_count' => 10, 'first_post_approval_count' => 20, 'discussion_count' => 10, 'comment_count' => 20],
                 ['id' => 4, 'username' => 'newUser', 'email' => 'newuser@machine.local', 'is_email_confirmed' => true, 'first_discussion_approval_count' => 0, 'first_post_approval_count' => 0, 'discussion_count' => 0, 'comment_count' => 0],
@@ -72,9 +74,7 @@ class PrivateDiscussionTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function userSubjectToApprovalCannotStartPrivateDiscussion()
     {
         $response = $this->createPrivateDiscussion(4, 3);
@@ -82,9 +82,7 @@ class PrivateDiscussionTest extends TestCase
         $this->assertEquals(403, $response->getStatusCode());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function establishedUserCanStartPrivateDiscussion()
     {
         $response = $this->createPrivateDiscussion(3, 4);
@@ -92,9 +90,7 @@ class PrivateDiscussionTest extends TestCase
         $this->assertEquals(201, $response->getStatusCode());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function userSubjectToApprovalCanStartPrivateDiscussionWhenRestrictionDisabled()
     {
         $this->setting('fof-first-post-approval.restrictPrivateDiscussions', false);
@@ -104,9 +100,7 @@ class PrivateDiscussionTest extends TestCase
         $this->assertEquals(201, $response->getStatusCode());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function forumAttributesReflectTheRestriction()
     {
         $response = $this->send(
@@ -120,9 +114,7 @@ class PrivateDiscussionTest extends TestCase
         $this->assertFalse($attributes['canStartPrivateDiscussionWithGroups']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function forumAttributesAllowEstablishedUser()
     {
         $response = $this->send(

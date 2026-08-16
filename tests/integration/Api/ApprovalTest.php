@@ -17,6 +17,10 @@ use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
 use FoF\FirstPostApproval\Tests\integration\ExtensionDepsTrait;
 use Illuminate\Support\Arr;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
+use Flarum\Post\Post;
+use Flarum\User\User;
 
 class ApprovalTest extends TestCase
 {
@@ -33,13 +37,13 @@ class ApprovalTest extends TestCase
         $this->setting('flarum-tags.min_primary_tags', 0);
 
         $this->prepareDatabase([
-            'discussions' => [
+            Discussion::class => [
                 ['id' => 1, 'title' => __CLASS__, 'created_at' => Carbon::now()->toDateTimeString(), 'user_id' => 3, 'first_post_id' => 1],
             ],
-            'posts' => [
+            Post::class => [
                 ['id' => 1, 'discussion_id' => 1, 'number' => 1, 'created_at' => Carbon::now()->subDay()->toDateTimeString(), 'user_id' => 3, 'type' => 'comment', 'content' => '<t></t>'],
             ],
-            'users' => [
+            User::class => [
                 $this->normalUser(),
                 ['id' => 3, 'username' => 'establishedUser', 'email' => 'established@machine.local', 'is_email_confirmed' => true, 'first_discussion_approval_count' => 10, 'first_post_approval_count' => 20],
                 ['id' => 4, 'username' => 'newUser', 'email' => 'newuser@machine.local', 'is_email_confirmed' => true, 'first_discussion_approval_count' => 0, 'first_post_approval_count' => 0],
@@ -47,7 +51,7 @@ class ApprovalTest extends TestCase
         ]);
     }
 
-    public function approvedUsers(): array
+    public static function approvedUsers(): array
     {
         return [
             [1],
@@ -55,7 +59,7 @@ class ApprovalTest extends TestCase
         ];
     }
 
-    public function unapprovedUsers(): array
+    public static function unapprovedUsers(): array
     {
         return [
             [2],
@@ -63,11 +67,8 @@ class ApprovalTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     *
-     * @dataProvider approvedUsers
-     */
+    #[Test]
+    #[DataProvider('approvedUsers')]
     public function approvedUsersCanStartDiscussionWithoutApproval(?int $userId)
     {
         $response = $this->send(
@@ -104,11 +105,8 @@ class ApprovalTest extends TestCase
         $this->assertNull($flag);
     }
 
-    /**
-     * @test
-     *
-     * @dataProvider approvedUsers
-     */
+    #[Test]
+    #[DataProvider('approvedUsers')]
     public function approvedUsersCanReplyWithoutApproval(?int $userId)
     {
         $response = $this->send(
@@ -149,11 +147,8 @@ class ApprovalTest extends TestCase
         $this->assertNull($flag);
     }
 
-    /**
-     * @test
-     *
-     * @dataProvider unapprovedUsers
-     */
+    #[Test]
+    #[DataProvider('unapprovedUsers')]
     public function unapprovedUsersDiscussionIsMarkedForApproval(?int $userId)
     {
         $response = $this->send(
@@ -192,11 +187,8 @@ class ApprovalTest extends TestCase
         $this->assertEquals('approval', $flag->type);
     }
 
-    /**
-     * @test
-     *
-     * @dataProvider unapprovedUsers
-     */
+    #[Test]
+    #[DataProvider('unapprovedUsers')]
     public function unapprovedUsersPostIsMarkedForApproval(?int $userId)
     {
         $response = $this->send(
