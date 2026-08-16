@@ -1,12 +1,21 @@
 <?php
 
-namespace ClarkWinkelmann\FirstPostApproval\Listeners;
+/*
+ * This file is part of fof/first-post-approval.
+ *
+ * Copyright (c) FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace FoF\FirstPostApproval\Listeners;
 
 use Flarum\Approval\Event\PostWasApproved;
 
 class CountPostApprovals
 {
-    public function handle(PostWasApproved $event)
+    public function handle(PostWasApproved $event): void
     {
         $user = $event->post->user;
 

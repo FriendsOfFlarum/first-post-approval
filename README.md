@@ -1,8 +1,26 @@
-# First Post Approval
+# First Post Approval by FriendsOfFlarum
 
-[![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/clarkwinkelmann/flarum-ext-first-post-approval/blob/master/LICENSE.txt) [![Latest Stable Version](https://img.shields.io/packagist/v/clarkwinkelmann/flarum-ext-first-post-approval.svg)](https://packagist.org/packages/clarkwinkelmann/flarum-ext-first-post-approval) [![Total Downloads](https://img.shields.io/packagist/dt/clarkwinkelmann/flarum-ext-first-post-approval.svg)](https://packagist.org/packages/clarkwinkelmann/flarum-ext-first-post-approval) [![Donate](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.me/clarkwinkelmann)
+![License](https://img.shields.io/badge/license-MIT-blue.svg) [![Latest Stable Version](https://img.shields.io/packagist/v/fof/first-post-approval.svg)](https://packagist.org/packages/fof/first-post-approval) [![Total Downloads](https://img.shields.io/packagist/dt/fof/first-post-approval.svg)](https://packagist.org/packages/fof/first-post-approval) [![OpenCollective](https://img.shields.io/badge/opencollective-fof-blue.svg)](https://opencollective.com/fof/donate)
 
-This extension holds the first n posts and/or discussions from users for approval.
+A [Flarum](http://flarum.org) extension. Hold the first n posts and/or discussions from new users for approval.
+
+## Installation
+
+```sh
+composer require fof/first-post-approval
+```
+
+Flarum's **Approval** and **Flags** extensions must also be enabled.
+
+## Updating
+
+```sh
+composer update fof/first-post-approval
+php flarum migrate
+php flarum cache:clear
+```
+
+## Documentation
 
 Some groups can be excluded from the rule on the permissions page.
 
@@ -14,32 +32,29 @@ If you don't set a number of discussions to approve, new discussions will be hel
 For example if you require 2 posts to be approved but 0 discussions, if one of the first two interactions of the user is to create a discussion, that discussion will be held for approval.
 But if they first create two replies that get approved, they can then create their first discussion without approval.
 
-## Existing users
+### Existing users
 
 If you install this extension on a forum with an existing user base, you might want to manually update the `first_post_approval_count` and `first_discussion_approval_count` columns on the `users` table to prevent existing users from being subjected to the first post approval.
 Any number equal or higher than the number configured in the extension settings will cause the approval to be skipped.
 
 Alternatively, you can exclude some groups on the permissions page.
 
-## Installation
+### FriendsOfFlarum Byobu
 
-Flarum's **Approval** and **Flags** extensions must be enabled.
+Private discussions cannot be held for approval, so if the [FriendsOfFlarum Byobu](https://github.com/FriendsOfFlarum/byobu) extension is enabled, users who are still subject to first post approval are prevented from starting them. This is enforced by the API, not just hidden in the interface.
 
-    composer require clarkwinkelmann/flarum-ext-first-post-approval
+If you would rather let new users message each other freely, turn off **Prevent private discussions until approved** in the extension settings.
 
-## Support
+## Credits
 
-This extension is under **minimal maintenance**.
-
-It was developed for a client and released as open-source for the benefit of the community.
-I might publish simple bugfixes or compatibility updates for free.
-
-You can [contact me](https://clarkwinkelmann.com/flarum) to sponsor additional features or updates.
-
-Support is offered on a "best effort" basis through the Flarum community thread.
+This extension was originally developed by [Clark Winkelmann](https://clarkwinkelmann.com/) for a client and released as open-source. It has since been adopted and is now maintained by [FriendsOfFlarum](https://friendsofflarum.org/).
 
 ## Links
 
-- [GitHub](https://github.com/clarkwinkelmann/flarum-ext-first-post-approval)
-- [Packagist](https://packagist.org/packages/clarkwinkelmann/flarum-ext-first-post-approval)
-- [Discuss](https://discuss.flarum.org/d/25055)
+[![OpenCollective](https://img.shields.io/badge/donate-friendsofflarum-44AEE5?style=for-the-badge&logo=open-collective)](https://opencollective.com/fof/donate)
+
+- [Packagist](https://packagist.org/packages/fof/first-post-approval)
+- [GitHub](https://github.com/FriendsOfFlarum/first-post-approval)
+- [Discuss](https://discuss.flarum.org/d/39689)
+
+An extension by [FriendsOfFlarum](https://github.com/FriendsOfFlarum).

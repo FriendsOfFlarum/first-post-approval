@@ -1,8 +1,17 @@
 <?php
 
-namespace ClarkWinkelmann\FirstPostApproval\Listeners;
+/*
+ * This file is part of fof/first-post-approval.
+ *
+ * Copyright (c) FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
-use ClarkWinkelmann\FirstPostApproval\Repository\FirstPostApprovalRepository;
+namespace FoF\FirstPostApproval\Listeners;
+
+use FoF\FirstPostApproval\Repository\FirstPostApprovalRepository;
 use Flarum\Discussion\Discussion;
 use Flarum\Extension\ExtensionManager;
 use Flarum\Post\Event\Saving;
@@ -10,18 +19,14 @@ use Flarum\Settings\SettingsRepositoryInterface;
 
 class UnapproveNewPosts
 {
-    protected $settings;
-    protected $firstPosts;
-    protected $extensions;
-
-    public function __construct(SettingsRepositoryInterface $settings, FirstPostApprovalRepository $firstPosts, ExtensionManager $extensions)
-    {
-        $this->settings = $settings;
-        $this->firstPosts = $firstPosts;
-        $this->extensions = $extensions;
+    public function __construct(
+        protected SettingsRepositoryInterface $settings,
+        protected FirstPostApprovalRepository $firstPosts,
+        protected ExtensionManager $extensions
+    ) {
     }
 
-    public function handle(Saving $event)
+    public function handle(Saving $event): void
     {
         $post = $event->post;
 

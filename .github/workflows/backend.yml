@@ -1,4 +1,4 @@
-name: First Post Approval PHP
+name: FoF First Post Approval PHP
 
 on: [workflow_dispatch, push, pull_request]
 
@@ -8,6 +8,6 @@ jobs:
     with:
       enable_backend_testing: true
       enable_phpstan: true
-      php_versions: '["8.0", "8.1", "8.2", "8.3", "8.4"]'
+      php_versions: '["8.0", "8.1", "8.2", "8.3", "8.4", "8.5"]'
 
       backend_directory: .

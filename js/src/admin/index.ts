@@ -1,54 +1,43 @@
 import app from 'flarum/admin/app';
-import AdminPage from 'flarum/admin/components/AdminPage';
 
-const settingsPrefix = 'clarkwinkelmann-first-post-approval.';
-const translationPrefix = 'clarkwinkelmann-first-post-approval.admin.settings.';
+export const settingsPrefix = 'fof-first-post-approval';
 
-app.initializers.add('clarkwinkelmann-first-post-approval', () => {
-  app.extensionData
-    .for('clarkwinkelmann-first-post-approval')
-    .registerSetting(function (this: AdminPage) {
-      return m('.Form-group', [
-        m(
-          'label',
-          {
-            for: 'clarkwinkelmann-first-post-approval-postCount',
-          },
-          app.translator.trans(translationPrefix + 'postCount')
-        ),
-        m('input.FormControl', {
-          id: 'clarkwinkelmann-first-post-approval-postCount',
-          type: 'number',
-          min: 0,
-          step: 1,
-          bidi: this.setting(settingsPrefix + 'postCount', '0'),
-        }),
-      ]);
+app.initializers.add(settingsPrefix, () => {
+  const extensionData = app.extensionData
+    .for(settingsPrefix)
+    .registerSetting({
+      setting: `${settingsPrefix}.postCount`,
+      label: app.translator.trans(`${settingsPrefix}.admin.settings.postCount`),
+      help: app.translator.trans(`${settingsPrefix}.admin.settings.postCount_help`),
+      type: 'number',
+      min: 0,
+      step: 1,
     })
-    .registerSetting(function (this: AdminPage) {
-      return m('.Form-group', [
-        m(
-          'label',
-          {
-            for: 'clarkwinkelmann-first-post-approval-discussionCount',
-          },
-          app.translator.trans(translationPrefix + 'discussionCount')
-        ),
-        m('input.FormControl', {
-          id: 'clarkwinkelmann-first-post-approval-discussionCount',
-          type: 'number',
-          min: 0,
-          step: 1,
-          bidi: this.setting(settingsPrefix + 'discussionCount', '0'),
-        }),
-      ]);
-    })
-    .registerPermission(
-      {
-        icon: 'fas fa-check',
-        label: app.translator.trans('clarkwinkelmann-first-post-approval.admin.permissions.bypass'),
-        permission: 'discussion.firstPostWithoutApproval',
-      },
-      'start'
-    );
+    .registerSetting({
+      setting: `${settingsPrefix}.discussionCount`,
+      label: app.translator.trans(`${settingsPrefix}.admin.settings.discussionCount`),
+      help: app.translator.trans(`${settingsPrefix}.admin.settings.discussionCount_help`),
+      type: 'number',
+      min: 0,
+      step: 1,
+    });
+
+  // Only relevant when Byobu is installed and enabled
+  if (app.initializers.has('fof-byobu')) {
+    extensionData.registerSetting({
+      setting: `${settingsPrefix}.restrictPrivateDiscussions`,
+      label: app.translator.trans(`${settingsPrefix}.admin.settings.restrictPrivateDiscussions`),
+      help: app.translator.trans(`${settingsPrefix}.admin.settings.restrictPrivateDiscussions_help`),
+      type: 'switch',
+    });
+  }
+
+  extensionData.registerPermission(
+    {
+      icon: 'fas fa-check',
+      label: app.translator.trans(`${settingsPrefix}.admin.permissions.bypass`),
+      permission: 'discussion.firstPostWithoutApproval',
+    },
+    'start'
+  );
 });

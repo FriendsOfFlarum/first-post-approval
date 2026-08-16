@@ -1,5 +1,5 @@
 {
-    "name": "@clarkwinkelmann/first-post-approval",
+    "name": "@fof/first-post-approval",
     "private": true,
     "prettier": "@flarum/prettier-config",
     "devDependencies": {

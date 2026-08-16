@@ -1,6 +1,15 @@
 <?php
 
-namespace ClarkWinkelmann\FirstPostApproval\Repository;
+/*
+ * This file is part of fof/first-post-approval.
+ *
+ * Copyright (c) FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace FoF\FirstPostApproval\Repository;
 
 use Carbon\Carbon;
 use Flarum\Flags\Flag;
@@ -10,11 +19,9 @@ use Flarum\User\User;
 
 class FirstPostApprovalRepository
 {
-    protected $settings;
-    
-    public function __construct(SettingsRepositoryInterface $settings)
-    {
-        $this->settings = $settings;
+    public function __construct(
+        protected SettingsRepositoryInterface $settings
+    ) {
     }
 
     public function flagPost(Post $post): void
@@ -41,7 +48,7 @@ class FirstPostApprovalRepository
         if ($user->can('firstPostWithoutApproval')) {
             return false;
         }
-        
+
         if ($user->comment_count < $this->requiredPostCount() || $user->discussion_count < $this->requiredDiscussionCount()) {
             return true;
         }
@@ -51,11 +58,20 @@ class FirstPostApprovalRepository
 
     public function requiredDiscussionCount(): int
     {
-        return $this->settings->get('clarkwinkelmann-first-post-approval.discussionCount');
+        return (int) $this->settings->get('fof-first-post-approval.discussionCount');
     }
 
     public function requiredPostCount(): int
     {
-        return $this->settings->get('clarkwinkelmann-first-post-approval.postCount');
+        return (int) $this->settings->get('fof-first-post-approval.postCount');
+    }
+
+    /**
+     * Whether users subject to first post approval are prevented from starting
+     * private discussions.
+     */
+    public function restrictsPrivateDiscussions(): bool
+    {
+        return (bool) $this->settings->get('fof-first-post-approval.restrictPrivateDiscussions');
     }
 }

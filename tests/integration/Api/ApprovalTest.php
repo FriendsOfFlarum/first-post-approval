@@ -1,9 +1,18 @@
 <?php
 
-namespace ClarkWinkelmann\FirstPostApproval\Tests\integration\Api;
+/*
+ * This file is part of fof/first-post-approval.
+ *
+ * Copyright (c) FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace FoF\FirstPostApproval\Tests\integration\Api;
 
 use Carbon\Carbon;
-use ClarkWinkelmann\FirstPostApproval\Tests\integration\ExtensionDepsTrait;
+use FoF\FirstPostApproval\Tests\integration\ExtensionDepsTrait;
 use Flarum\Discussion\Discussion;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
@@ -13,12 +22,15 @@ class ApprovalTest extends TestCase
 {
     use RetrievesAuthorizedUsers;
     use ExtensionDepsTrait;
-    
+
     public function setUp(): void
     {
         parent::setUp();
 
         $this->extensionDeps();
+
+        // Tags is only enabled as a dependency of Byobu, so don't require a tag to start a discussion
+        $this->setting('flarum-tags.min_primary_tags', 0);
 
         $this->prepareDatabase([
             'discussions' => [
