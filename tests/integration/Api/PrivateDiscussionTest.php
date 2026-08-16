@@ -17,9 +17,9 @@ use Flarum\Group\Group;
 use Flarum\Post\Post;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
+use Flarum\User\User;
 use FoF\FirstPostApproval\Tests\integration\ExtensionDepsTrait;
 use PHPUnit\Framework\Attributes\Test;
-use Flarum\User\User;
 
 class PrivateDiscussionTest extends TestCase
 {

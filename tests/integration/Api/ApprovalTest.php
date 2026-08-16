@@ -14,14 +14,14 @@ namespace FoF\FirstPostApproval\Tests\integration\Api;
 use Carbon\Carbon;
 use Flarum\Discussion\Discussion;
 use Flarum\Group\Group;
+use Flarum\Post\Post;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
+use Flarum\User\User;
 use FoF\FirstPostApproval\Tests\integration\ExtensionDepsTrait;
 use Illuminate\Support\Arr;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use Flarum\Post\Post;
-use Flarum\User\User;
 
 class ApprovalTest extends TestCase
 {
