@@ -8,5 +8,4 @@ parameters:
     - vendor/flarum/approval/extend.php
     - extend.php
     - src
-  checkMissingIterableValueType: false
   databaseMigrationsPath: ['migrations']

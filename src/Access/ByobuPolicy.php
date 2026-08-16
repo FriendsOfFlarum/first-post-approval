@@ -14,6 +14,7 @@ namespace FoF\FirstPostApproval\Access;
 use Flarum\User\Access\AbstractPolicy;
 use Flarum\User\User;
 use FoF\FirstPostApproval\Repository\FirstPostApprovalRepository;
+use Illuminate\Support\Str;
 
 /**
  * Prevents users who are still subject to first post approval from starting
@@ -32,13 +33,21 @@ class ByobuPolicy extends AbstractPolicy
 {
     /**
      * The Byobu abilities that should be denied while the user is subject to
-     * first post approval.
+     * first post approval, without the `discussion.` prefix.
+     *
+     * Byobu is inconsistent about how it spells these. `ForumResourceFields` and
+     * `checkPermissionsForNewDiscussion()` query the prefixed name with no model,
+     * which reaches this policy through its global registration. But
+     * `PersistRecipients` queries `addMoreThanTwoUserRecipients` unprefixed
+     * against a Discussion, which the gate routes to Discussion model policies
+     * only. That is why this policy is registered both globally and as a
+     * Discussion model policy, and why the prefix is normalised away below.
      */
     public const RESTRICTED_ABILITIES = [
-        'discussion.startPrivateDiscussionWithUsers',
-        'discussion.startPrivateDiscussionWithGroups',
-        'discussion.startPrivateDiscussionWithBlockers',
-        'discussion.addMoreThanTwoUserRecipients',
+        'startPrivateDiscussionWithUsers',
+        'startPrivateDiscussionWithGroups',
+        'startPrivateDiscussionWithBlockers',
+        'addMoreThanTwoUserRecipients',
     ];
 
     public function __construct(
@@ -46,23 +55,22 @@ class ByobuPolicy extends AbstractPolicy
     ) {
     }
 
-    /**
-     * @param mixed $instance
-     *
-     * @return string|void
-     */
-    public function can(User $actor, string $ability, $instance = null)
+    public function can(User $actor, string $ability): ?string
     {
+        $ability = Str::after($ability, 'discussion.');
+
         if (!in_array($ability, self::RESTRICTED_ABILITIES, true)) {
-            return;
+            return null;
         }
 
         if (!$this->firstPosts->restrictsPrivateDiscussions()) {
-            return;
+            return null;
         }
 
         if ($this->firstPosts->isUserSubjectToFPA($actor)) {
             return $this->forceDeny();
         }
+
+        return null;
     }
 }

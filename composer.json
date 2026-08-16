@@ -11,9 +11,8 @@
     "type": "flarum-extension",
     "license": "MIT",
     "require": {
-        "php": "^8.0",
         "flarum/approval": "*",
-        "flarum/core": "^1.8"
+        "flarum/core": "^2.0.0"
     },
     "replace": {
         "clarkwinkelmann/flarum-ext-first-post-approval": "*"
@@ -69,9 +68,10 @@
         }
     },
     "require-dev": {
-        "flarum/phpstan": "*",
-        "flarum/tags": "^1.0",
-        "flarum/testing": "^1.0.0",
+        "flarum/audit": "*",
+        "flarum/phpstan": "^2.0.0",
+        "flarum/tags": "*",
+        "flarum/testing": "^2.0.0",
         "fof/byobu": "*"
     },
     "scripts": {
@@ -99,5 +99,7 @@
     },
     "config": {
         "sort-packages": true
-    }
+    },
+    "minimum-stability": "beta",
+    "prefer-stable": true
 }

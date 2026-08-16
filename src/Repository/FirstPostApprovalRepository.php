@@ -44,8 +44,11 @@ class FirstPostApprovalRepository
 
     public function isUserSubjectToFPA(User $user): bool
     {
-        // If user has bypass permission, then early return
-        if ($user->can('firstPostWithoutApproval')) {
+        // If user has bypass permission, then early return.
+        // The permission is stored prefixed (`discussion.firstPostWithoutApproval`).
+        // DiscussionPolicy only applies that prefix when a Discussion is passed, and
+        // there is none here, so the ability must be spelled out in full.
+        if ($user->hasPermission('discussion.firstPostWithoutApproval')) {
             return false;
         }
 

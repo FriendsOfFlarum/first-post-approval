@@ -12,6 +12,7 @@
 namespace FoF\FirstPostApproval;
 
 use Flarum\Approval\Event\PostWasApproved;
+use Flarum\Discussion\Discussion;
 use Flarum\Extend;
 use Flarum\Post\Event\Saving;
 use Flarum\User\User;
@@ -37,7 +38,11 @@ return [
 
     (new Extend\Conditional())
         ->whenExtensionEnabled('fof-byobu', fn () => [
+            // Registered twice on purpose: Byobu checks some of these abilities
+            // without a model (global) and others against a Discussion instance,
+            // and the gate only consults one set of policies per check.
             (new Extend\Policy())
-                ->globalPolicy(Access\ByobuPolicy::class),
+                ->globalPolicy(Access\ByobuPolicy::class)
+                ->modelPolicy(Discussion::class, Access\ByobuPolicy::class),
         ]),
 ];
