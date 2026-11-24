@@ -21,17 +21,6 @@ export default [
       min: 0,
       step: 1,
     }))
-    // Only relevant when Byobu is installed and enabled
-    .setting(() =>
-      'fof-byobu' in flarum.extensions
-        ? {
-            setting: `${settingsPrefix}.restrictPrivateDiscussions`,
-            label: app.translator.trans(`${settingsPrefix}.admin.settings.restrictPrivateDiscussions`),
-            help: app.translator.trans(`${settingsPrefix}.admin.settings.restrictPrivateDiscussions_help`),
-            type: 'switch',
-          }
-        : null
-    )
     .permission(
       () => ({
         icon: 'fas fa-check',
@@ -40,4 +29,13 @@ export default [
       }),
       'start'
     ),
+
+  new Extend.Conditional().whenExtensionEnabled('fof-byobu', () => [
+    new Extend.Admin().setting(() => ({
+      setting: `${settingsPrefix}.restrictPrivateDiscussions`,
+      label: app.translator.trans(`${settingsPrefix}.admin.settings.restrictPrivateDiscussions`),
+      help: app.translator.trans(`${settingsPrefix}.admin.settings.restrictPrivateDiscussions_help`),
+      type: 'switch',
+    })),
+  ]),
 ];
