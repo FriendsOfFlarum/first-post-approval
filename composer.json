@@ -11,8 +11,9 @@
     "type": "flarum-extension",
     "license": "MIT",
     "require": {
-        "flarum/approval": "*",
-        "flarum/core": "^2.0.0"
+        "flarum/approval": "^2.1.0-beta.1",
+        "flarum/core": "^2.1.0-beta.1",
+        "flarum/flags": "^2.1.0-beta.1"
     },
     "replace": {
         "clarkwinkelmann/flarum-ext-first-post-approval": "*"
@@ -65,13 +66,16 @@
                 "githubActions": true,
                 "backendTesting": true
             }
+        },
+        "branch-alias": {
+            "dev-2.x": "2.x-dev"
         }
     },
     "require-dev": {
-        "flarum/audit": "*",
-        "flarum/phpstan": "^2.0.0",
-        "flarum/tags": "*",
-        "flarum/testing": "^2.0.0",
+        "flarum/audit": "^2.1.0-beta.1",
+        "flarum/phpstan": "^2.1.0-beta.1",
+        "flarum/tags": "^2.1.0-beta.1",
+        "flarum/testing": "^2.1.0-beta.1",
         "fof/byobu": "*"
     },
     "scripts": {
@@ -82,14 +86,18 @@
             "@test:integration"
         ],
         "test:unit": "phpunit -c tests/phpunit.unit.xml",
+        "test:unit:filter": "phpunit -c tests/phpunit.unit.xml --filter",
         "test:integration": "phpunit -c tests/phpunit.integration.xml",
+        "test:integration:filter": "phpunit -c tests/phpunit.integration.xml --filter",
         "test:setup": "@php tests/integration/setup.php"
     },
     "scripts-descriptions": {
         "analyse:phpstan": "Run static analysis",
         "test": "Runs all tests.",
         "test:unit": "Runs all unit tests.",
+        "test:unit:filter": "Runs the unit tests matching a pattern.",
         "test:integration": "Runs all integration tests.",
+        "test:integration:filter": "Runs the integration tests matching a pattern.",
         "test:setup": "Sets up a database for use with integration tests. Execute this only once."
     },
     "autoload-dev": {

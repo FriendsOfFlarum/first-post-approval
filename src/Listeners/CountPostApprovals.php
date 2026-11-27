@@ -23,11 +23,6 @@ class CountPostApprovals
             return;
         }
 
-        // Do not count posts if they were hidden (which approves them)
-        if ($event->post->hidden_at) {
-            return;
-        }
-
         if ($event->post->number === 1) {
             $user->first_discussion_approval_count++;
         } else {
