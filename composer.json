@@ -12,7 +12,7 @@
     "license": "MIT",
     "require": {
         "flarum/approval": "^2.1.0-beta.1",
-        "flarum/core": "2.x-dev",
+        "flarum/core": "^2.1.0-beta.1",
         "flarum/flags": "^2.1.0-beta.1"
     },
     "replace": {
@@ -108,6 +108,6 @@
     "config": {
         "sort-packages": true
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "beta",
     "prefer-stable": true
 }
