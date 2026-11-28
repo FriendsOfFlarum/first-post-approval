@@ -32,6 +32,11 @@ class FirstPostApprovalRepository
                 $post->discussion->save();
             }
 
+            // Core's approval, whose listener runs first, may have queued its own.
+            if (Flag::query()->useWritePdo()->where('post_id', $post->id)->where('type', 'approval')->exists()) {
+                return;
+            }
+
             $flag = new Flag();
 
             $flag->post_id = $post->id;
