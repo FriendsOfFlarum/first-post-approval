@@ -201,7 +201,7 @@ class ApprovalCountTest extends TestCase
     }
 
     #[Test]
-    public function approvingLeavesNoApprovalFlagWhenCoreApprovalAlsoHoldsThePost()
+    public function postsCoreApprovalAlsoHoldsGetOneFlagAndApprovingClearsIt()
     {
         $this->database()->table('group_permission')
             ->where('group_id', Group::MEMBER_ID)
@@ -211,9 +211,8 @@ class ApprovalCountTest extends TestCase
         $replyId = $this->reply();
         [, $firstPostId] = $this->startDiscussion();
 
-        // One flag from core's approval, one from this extension.
-        $this->assertSame(2, $this->approvalFlagCount($replyId));
-        $this->assertSame(2, $this->approvalFlagCount($firstPostId));
+        $this->assertSame(1, $this->approvalFlagCount($replyId));
+        $this->assertSame(1, $this->approvalFlagCount($firstPostId));
 
         $this->patchPost($replyId, ['isApproved' => true]);
         $this->patchPost($firstPostId, ['isApproved' => true]);
@@ -280,7 +279,7 @@ class ApprovalCountTest extends TestCase
     protected function assertPending(int $postId, string $message = ''): void
     {
         $this->assertFalse(Post::find($postId)->is_approved, $message);
-        $this->assertGreaterThan(0, $this->approvalFlagCount($postId), $message);
+        $this->assertSame(1, $this->approvalFlagCount($postId), $message);
     }
 
     protected function assertCounts(int $discussions, int $posts): void
